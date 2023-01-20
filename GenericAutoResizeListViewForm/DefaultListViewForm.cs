@@ -101,6 +101,9 @@ namespace GenericAutoResizeListViewForm
 
             m_Panel.MinimumSize = m_Panel_Header.Size + m_Panel_Buttons.Size;
 
+            if (listView is DefaultDynamicListView<T> listi)
+                listi.Init();
+
             ResizeListView();
         }
         #endregion
@@ -191,8 +194,12 @@ namespace GenericAutoResizeListViewForm
 #if DEBUG
         private void m_Button_Remove_Click(object sender, EventArgs e)
         {
-            if (m_ListView is DefaultDynamicListView<T> { m_InnerList.Values.Count: > 0 } view)
-                m_ListView.RemoveItem(view.m_InnerList.Values[view.m_InnerList.Values.Count - 1]);
+            if (m_ListView is DefaultDynamicListView<T>)
+            {
+                var view = ((DefaultDynamicListView<T>)m_ListView);
+                if (view.m_InnerList.ColumnDefinition.Count > 0)
+                    m_ListView.RemoveItem(view.m_InnerList.Values[view.m_InnerList.Values.Count - 1]);
+            }
 
             ResizeListView();
         }

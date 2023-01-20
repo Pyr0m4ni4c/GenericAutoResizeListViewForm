@@ -20,7 +20,6 @@ namespace GenericAutoResizeListViewForm
 
         private bool lastSortedAscending = false;
         private string lastSortedKey;
-        private List<string> _columnDefinition;
 #if !DEBUG
         private IListViewObjectContainer<T> m_InnerList;
 #else
@@ -53,7 +52,6 @@ namespace GenericAutoResizeListViewForm
             _staticColumnWidth = staticColumnWidth;
             _columnAlignment = alignment;
             m_InnerList = items ?? throw new ArgumentNullException(nameof(items));
-            _columnDefinition = GetColumnDefinitions();
 
             /* Text-Align des ersten Headers ist immer links, die Eigenschaft wird ignoriert.
              Man könnte mit unermesslichen Aufwand die ListView manuell zeichnen,
@@ -71,7 +69,6 @@ namespace GenericAutoResizeListViewForm
             ColumnClick += OnColumnClick;
 
             InitList();
-            RefreshValues();
         }
         #endregion
 
@@ -191,6 +188,11 @@ namespace GenericAutoResizeListViewForm
         #endregion
 
         #region Implementation of IListViewControls
+        public void Init()
+        {
+            RefreshValues();
+        }
+
         public void ResizeListView(out int extendPanelWidthBy)
         {
             ResizeListViewInternal(out extendPanelWidthBy);
@@ -210,8 +212,9 @@ namespace GenericAutoResizeListViewForm
 
         public void AutoResizeParent(Form form, Panel containingPanel)
         {
+            form.AutoSize = containingPanel.AutoSize = true;
             ResizeListView(out var extendPanelWidthBy);
-            containingPanel.Size = containingPanel.MinimumSize = this.MinimumSize with { Width = this.MinimumSize.Width + extendPanelWidthBy };
+            containingPanel.Size = containingPanel.MinimumSize = new Size(this.MinimumSize.Width + extendPanelWidthBy, this.MinimumSize.Height);
             form.Size = Size.Empty; // triggert AutoSize
         }
 
@@ -228,6 +231,12 @@ namespace GenericAutoResizeListViewForm
             lastSortedAscending = !lastSortedAscending;
             lastSortedKey = primaryColumnKey;
 
+            RefreshValues();
+        }
+
+        public void ChangeDataset(IListViewObjectContainer<T> newItems)
+        {
+            m_InnerList = newItems;
             RefreshValues();
         }
         #endregion

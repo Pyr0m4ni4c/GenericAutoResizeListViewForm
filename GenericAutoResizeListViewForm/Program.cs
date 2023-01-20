@@ -49,7 +49,7 @@ namespace GenericAutoResizeListViewForm
             defaultListViewObjectContainer.ObjectColumnHandlings =
                 new Dictionary<string, IObjectColumnHandling<ExampleObject>>()
                 {
-                    { "1", new ExampleColumnHandling() { SortKey = o => o.m_Name, GetValue = o => o.m_Name, GetDescription = o => o.m_Name} },
+                    { "1", new ExampleColumnHandling() { SortKey = o => o.m_Name, GetValue = o => o.m_Name, GetDescription = o => o.m_Name } },
                     { "2", new ExampleColumnHandling() { SortKey = o => o.m_IValue, GetValue = o => o.m_IValue, GetDescription = o => o.m_IValue.ToString() } },
                 };
 

@@ -11,6 +11,8 @@ namespace GenericAutoResizeListViewForm
         void RemoveItem(T o);
         void AutoResizeParent(Form form, Panel containingPanel);
         void SortColumnAndChildren(string primaryColumnKey);
+        void ChangeDataset(IListViewObjectContainer<T> newItems);
+        void Init();
         T[] SelectedValues { get; }
     }
 
