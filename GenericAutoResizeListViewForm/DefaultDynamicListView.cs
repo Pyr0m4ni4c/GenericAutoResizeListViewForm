@@ -142,15 +142,15 @@ namespace GenericAutoResizeListViewForm
             var itemsCount = Items.Count > _shownItems ? _shownItems : Items.Count;
             var fontHeight = TextRenderer.MeasureText("|", Font).Height + fontPadding;
 
-            var headerHeight = _visualStylesEnabled ? 28 : 18;
+            var headerHeight = fontHeight + (_visualStylesEnabled ? 8 : 4);
             var sonderOffset = _visualStylesEnabled
-                ? new[] { 4 }[0]
-                : new[] { 3, 7, 4 }[Math.Min(3, Items.Count) % 3];
+                ? new[] {4}[0]
+                : new[] {3, 7, 4}[Math.Min(3, Items.Count) % 3];
             _maxHeight = _maxHeight is <= 0 or int.MaxValue ? int.MaxValue : _maxHeight;
             var height = Math.Min(itemsCount * fontHeight + headerHeight + sonderOffset, _maxHeight);
 
             _maxWidth = _maxWidth is <= 0 or int.MaxValue ? int.MaxValue : _maxWidth;
-            var width = 5 + Columns.Cast<ColumnHeader>().Sum(column => column.Width);
+            var width = 5 + Enumerable.Cast<ColumnHeader>(Columns).Sum(column => column.Width);
             if (Items.Count > _shownItems)
             {
                 Scrollable = true;
@@ -160,6 +160,7 @@ namespace GenericAutoResizeListViewForm
             {
                 Scrollable = false;
             }
+
             width = Math.Min(width, _maxWidth);
 
             Size = MinimumSize = new Size(width, height);
